@@ -27,16 +27,20 @@ LDFLAGS=(
     "-Wl,-Map,kernel.map" # output a map file (linker allocation result)
 )
 
-"${CC}" "${CFLAGS[@]}" -c -o kernel.o kernel.c
-"${CC}" "${LDFLAGS[@]}" kernel.o -o kernel.elf
+"${CC}" "${CFLAGS[@]}" "${LDFLAGS[@]}" -o kernel.elf kernel.c common.c
 
 PROJECT_DIR=$(pwd)
 cat > compile_commands.json << EOF
 [
     {
         "directory": "${PROJECT_DIR}",
-        "command": "${CC} ${CFLAGS[@]} ${LDFLAGS[@]} -o kernel.elf kernel.c",
+        "command": "${CC} ${CFLAGS[@]} ${LDFLAGS[@]} -o kernel.elf kernel.c common.c",
         "file": "kernel.c"
+    }
+    {
+        "directory": "${PROJECT_DIR}",
+        "command": "${CC} ${CFLAGS[@]} ${LDFLAGS[@]} -o kernel.elf kernel.c common.c",
+        "file": "common.c"
     }
 ]
 EOF
